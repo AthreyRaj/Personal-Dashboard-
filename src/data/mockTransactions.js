@@ -1,0 +1,42 @@
+export const mockTransactions = [
+  {
+    id: 1,
+    date: "2025-06-20",
+    description: "Grocery Shopping",
+    amount: 1500,
+    category: "Food",
+    type: "Expense",
+  },
+  {
+    id: 2,
+    date: "2025-06-19",
+    description: "Salary",
+    amount: 20000,
+    category: "Income",
+    type: "Income",
+  },
+  {
+    id: 3,
+    date: "2025-06-18",
+    description: "Electricity Bill",
+    amount: 2400,
+    category: "Utilities",
+    type: "Expense",
+  },
+  {
+    id: 4,
+    date: "2025-06-17",
+    description: "Freelance Project",
+    amount: 5000,
+    category: "Income",
+    type: "Income",
+  },
+  {
+    id: 5,
+    date: "2025-06-16",
+    description: "Netflix Subscription",
+    amount: 499,
+    category: "Entertainment",
+    type: "Expense",
+  },
+];
