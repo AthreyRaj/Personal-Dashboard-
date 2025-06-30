@@ -1,44 +1,50 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const TransactionContext = createContext();
+export const TransactionContext = createContext();
 
-export const TransactionProvider = ({ children }) => {
+export function TransactionProvider({ children }) {
+  // Transactions
   const [transactions, setTransactions] = useState(() => {
-  const saved = localStorage.getItem("transactions");
-  if (saved) return JSON.parse(saved);
+    const saved = localStorage.getItem("transactions");
+    if (saved) return JSON.parse(saved);
 
-  // First-time load: preload mock data
-  const mockData = [
-    {
-      id: 1,
-      date: "2025-06-20",
-      description: "Grocery Shopping",
-      amount: 1500,
-      category: "Food",
-      type: "Expense"
-    },
-    {
-      id: 2,
-      date: "2025-06-19",
-      description: "Salary",
-      amount: 20000,
-      category: "Income",
-      type: "Income"
-    },
-    {
-      id: 3,
-      date: "2025-06-18",
-      description: "Electricity Bill",
-      amount: 2400,
-      category: "Utilities",
-      type: "Expense"
-    }
-  ];
+    // Preload mock data for first-time users
+    const mockData = [
+      {
+        id: 1,
+        date: "2025-06-20",
+        description: "Grocery Shopping",
+        notes: "Bought veggies and snacks",
+        amount: 1500,
+        category: "Food",
+        type: "Expense",
+        receipt: ""
+      },
+      {
+        id: 2,
+        date: "2025-06-19",
+        description: "Salary",
+        notes: "Company payout",
+        amount: 20000,
+        category: "Income",
+        type: "Income",
+        receipt: ""
+      },
+      {
+        id: 3,
+        date: "2025-06-18",
+        description: "Electricity Bill",
+        notes: "Paid online",
+        amount: 2400,
+        category: "Utilities",
+        type: "Expense",
+        receipt: ""
+      }
+    ];
 
-  localStorage.setItem("transactions", JSON.stringify(mockData));
-  return mockData;
-});
-
+    localStorage.setItem("transactions", JSON.stringify(mockData));
+    return mockData;
+  });
 
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -50,11 +56,34 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  // Upcoming Bills
+  const [bills, setBills] = useState(() => {
+    const saved = localStorage.getItem("bills");
+    return saved
+      ? JSON.parse(saved)
+      : [
+          { name: "Netflix", amount: 499, dueDay: 5 },
+          { name: "Wi-Fi", amount: 999, dueDay: 10 }
+        ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("bills", JSON.stringify(bills));
+  }, [bills]);
+
   return (
-    <TransactionContext.Provider value={{ transactions, setTransactions, handleDelete }}>
+    <TransactionContext.Provider
+      value={{
+        transactions,
+        setTransactions,
+        handleDelete,
+        bills,
+        setBills
+      }}
+    >
       {children}
     </TransactionContext.Provider>
   );
-};
+}
 
 export const useTransactions = () => useContext(TransactionContext);

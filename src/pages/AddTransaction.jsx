@@ -11,30 +11,39 @@ const glass = "backdrop-blur-md bg-white/70 dark:bg-black/60 border border-gray-
 export default function AddTransaction() {
   const { setTransactions } = useTransactions();
 
-  // Get today's date
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
+  const [receipt, setReceipt] = useState(null);
+
   const [form, setForm] = useState({
-    date: format(today, "yyyy-MM-dd"), // stored format
+    date: format(today, "yyyy-MM-dd"),
     description: "",
+    notes: "",
     amount: "",
     category: "",
-    type: "Expense"
+    type: "Expense",
+    receipt: ""
   });
 
-  // Handle other inputs
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Handle calendar date change
   const handleDateChange = (date) => {
     setSelectedDate(date);
     const formatted = date ? format(date, "yyyy-MM-dd") : "";
     setForm(prev => ({ ...prev, date: formatted }));
   };
 
-  // Submit form
+  const handleReceiptUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setReceipt(file);
+      setForm(prev => ({ ...prev, receipt: url }));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newTx = {
@@ -44,16 +53,17 @@ export default function AddTransaction() {
     };
     setTransactions(prev => [newTx, ...prev]);
     alert("Transaction added!");
-
-    // Reset
     const resetDate = new Date();
     setSelectedDate(resetDate);
+    setReceipt(null);
     setForm({
       date: format(resetDate, "yyyy-MM-dd"),
       description: "",
+      notes: "",
       amount: "",
       category: "",
-      type: "Expense"
+      type: "Expense",
+      receipt: ""
     });
   };
 
@@ -85,20 +95,57 @@ export default function AddTransaction() {
           />
         </div>
 
-        {/* Inputs */}
-        {["description", "amount", "category"].map((field) => (
-          <div key={field}>
-            <label className="block font-medium capitalize text-black dark:text-white mb-1">{field}</label>
-            <input
-              type={field === "amount" ? "number" : "text"}
-              name={field}
-              value={form[field]}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border rounded bg-white dark:bg-black text-black dark:text-white"
-            />
-          </div>
-        ))}
+        {/* Description */}
+        <div>
+          <label className="block font-medium text-black dark:text-white mb-1">Description</label>
+          <input
+            type="text"
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded bg-white dark:bg-black text-black dark:text-white"
+          />
+        </div>
+
+        {/* Notes */}
+        <div>
+          <label className="block font-medium text-black dark:text-white mb-1">Notes</label>
+          <input
+            type="text"
+            name="notes"
+            value={form.notes}
+            onChange={handleChange}
+            placeholder="Optional notes or memo"
+            className="w-full p-2 border rounded bg-white dark:bg-black text-black dark:text-white"
+          />
+        </div>
+
+        {/* Amount */}
+        <div>
+          <label className="block font-medium text-black dark:text-white mb-1">Amount</label>
+          <input
+            type="number"
+            name="amount"
+            value={form.amount}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded bg-white dark:bg-black text-black dark:text-white"
+          />
+        </div>
+
+        {/* Category */}
+        <div>
+          <label className="block font-medium text-black dark:text-white mb-1">Category</label>
+          <input
+            type="text"
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded bg-white dark:bg-black text-black dark:text-white"
+          />
+        </div>
 
         {/* Type */}
         <div>
@@ -114,7 +161,25 @@ export default function AddTransaction() {
           </select>
         </div>
 
-        <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+        {/* Receipt Upload */}
+        <div>
+          <label className="block font-medium text-black dark:text-white mb-1">Receipt (optional)</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleReceiptUpload}
+            className="w-full"
+          />
+          {receipt && (
+            <img src={URL.createObjectURL(receipt)} alt="Receipt" className="mt-3 max-h-40 rounded" />
+          )}
+        </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+        >
           Add
         </button>
       </motion.form>

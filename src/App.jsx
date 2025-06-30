@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import AddTransaction from "./pages/AddTransaction";
 import MonthlyExpense from "./pages/MonthlyExpense";
+import SmartDashboard from "./pages/SmartDashboard";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/add-transaction" element={<AddTransaction />} />
             <Route path="/monthly-expense" element={<MonthlyExpense />} />
+            <Route path="/smart" element={<SmartDashboard />} />
           </Routes>
         </div>
       </AnimatePresence>

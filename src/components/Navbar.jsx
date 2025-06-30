@@ -22,7 +22,7 @@ export default function Navbar({ dark, setDark }) {
           <Link to="/transactions" className={`font-medium ${active("/transactions")}`}>Transactions</Link>
           <Link to="/add-transaction" className={`font-medium ${active("/add-transaction")}`}>Add</Link>
           <Link to="/monthly-expense" className={`font-medium ${active("/monthly-expense")}`}>Monthly</Link>
-
+          <Link to="/smart" className={`font-medium ${active("/smart")}`}>Insights</Link>
         </div>
         <div>
           <button
